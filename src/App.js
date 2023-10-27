@@ -1,25 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { useState } from 'react'
+import {ThemeProvider} from 'styled-components'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import Home from './Home/home'
+import ShowDetails from './ShowDetails/ShowDetails'
+import './App.css'
+import { AppContainer } from './App.styled'
+const App = () => {
+  const[themeType,setThemeType]=useState('light')
+  const onThemeChanged=(e)=>{
+ 
+  if(e.target.checked){
+    setThemeType('dark')
+  }
+  else{
+    setThemeType('light')
+  }
+  }
+const appTheme={
+  light:{
+  appColor:'black',
+  appBackgroundColor:'white',
+  },
+  dark:{
+    appColor:'white',
+    appBackgroundColor:'black',
+  }
 }
 
-export default App;
+
+  console.log(themeType)
+  return (
+
+  <ThemeProvider theme={appTheme[themeType]}>
+  <div className='switch-container'>
+  <label htmlFor='switch' class="switch">
+  <input id='switch' type="checkbox" onChange={(e)=>onThemeChanged(e)}/>
+  <span class="slider round"></span>
+</label>
+    
+  </div>
+  
+  <AppContainer>
+  <BrowserRouter>
+    <Routes>
+      <Route  index element={<Home/>}/>
+      <Route path='/home' element={<Home/>}/>
+      <Route path='/search/:searchType/:searchInput' element={<Home/>}/>
+      <Route path='/show/:id' element={<ShowDetails/>}/>
+      <Route path='*' element={<h1>Page Not Found</h1>}/>
+    </Routes>
+    
+    
+    </BrowserRouter>
+  </AppContainer>
+    </ThemeProvider>
+  )
+    
+  
+}
+
+export default App
